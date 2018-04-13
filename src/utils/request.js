@@ -36,16 +36,15 @@ service.interceptors.response.use(
       Message({
         message: res.message,
         type: 'error',
-        duration: 5 * 1000
+        duration: 3 * 1000
       })
 
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (res.code === 100 || res.code === 401) {
-        MessageBox.confirm('你已被登出，请重新登录', '确定登出', {
+      if (res.code === '401') {
+        MessageBox.alert('你已登出，请重新登录', '确定登出', {
           confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
           type: 'warning'
-        }).then(router.push('/login'))
+        }).then(() => { router.push('/login') })
       }
       return Promise.reject('error')
     } else {
@@ -57,7 +56,7 @@ service.interceptors.response.use(
     Message({
       message: error.message,
       type: 'error',
-      duration: 5 * 1000
+      duration: 3 * 1000
     })
     return Promise.reject(error)
   }
